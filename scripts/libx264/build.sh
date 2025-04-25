@@ -2,7 +2,7 @@
 
 X264_AS=${FAM_CC}
 
-X264_ADDITIONAL_FLAGS=
+X264_ADDITIONAL_FLAGS=--extra-cflags="-D_LITTLE_ENDIAN  -mfpu=neon" # --enable-neon
 
 case $ANDROID_ABI in
   x86)

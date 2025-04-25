@@ -6,6 +6,7 @@
     --with-sysroot=${SYSROOT_PATH} \
     --disable-shared \
     --enable-static \
+    --enable-nasm \
     --with-pic \
     --disable-fast-install \
     --disable-analyzer-hooks \

@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 function max() {
-  [ $1 -ge $2 ] && echo "$1" || echo "$2"
+    [ $1 -ge $2 ] && echo "$1" || echo "$2"
 }
 
 export ANDROID_ABI=$1
 
 if [ $ANDROID_ABI = "arm64-v8a" ] || [ $ANDROID_ABI = "x86_64" ] ; then
-  # For 64bit we use value not less than 21
-  export ANDROID_PLATFORM=$(max ${DESIRED_ANDROID_API_LEVEL} 21)
+    # For 64bit we use value not less than 21
+    export ANDROID_PLATFORM=$(max ${DESIRED_ANDROID_API_LEVEL} 21)
 else
-  export ANDROID_PLATFORM=${DESIRED_ANDROID_API_LEVEL}
+    export ANDROID_PLATFORM=${DESIRED_ANDROID_API_LEVEL}
 fi
 
 export TOOLCHAIN_PATH=${ANDROID_NDK_HOME}/toolchains/llvm/prebuilt/${HOST_TAG}
@@ -21,24 +21,24 @@ CPU_FAMILY=
 export TARGET_TRIPLE_OS="android"
 
 case $ANDROID_ABI in
-  armeabi-v7a)
-    #cc       armv7a-linux-androideabi16-clang
-    export TARGET_TRIPLE_MACHINE_ARCH=arm
-    TARGET_TRIPLE_MACHINE_CC=armv7a
-    export TARGET_TRIPLE_OS=androideabi
+    armeabi-v7a)
+        #cc       armv7a-linux-androideabi16-clang
+        export TARGET_TRIPLE_MACHINE_ARCH=arm
+        TARGET_TRIPLE_MACHINE_CC=armv7a
+        export TARGET_TRIPLE_OS=androideabi
     ;;
-  arm64-v8a)
-    #cc       aarch64-linux-android21-clang
-    export TARGET_TRIPLE_MACHINE_ARCH=aarch64
+    arm64-v8a)
+        #cc       aarch64-linux-android21-clang
+        export TARGET_TRIPLE_MACHINE_ARCH=aarch64
     ;;
-  x86)
-    #cc       i686-linux-android16-clang
-    export TARGET_TRIPLE_MACHINE_ARCH=i686
-    CPU_FAMILY=x86
+    x86)
+        #cc       i686-linux-android16-clang
+        export TARGET_TRIPLE_MACHINE_ARCH=i686
+        CPU_FAMILY=x86
     ;;
-  x86_64)
-    #cc       x86_64-linux-android21-clang
-    export TARGET_TRIPLE_MACHINE_ARCH=x86_64
+    x86_64)
+        #cc       x86_64-linux-android21-clang
+        export TARGET_TRIPLE_MACHINE_ARCH=x86_64
     ;;
 esac
 
@@ -69,7 +69,7 @@ export TARGET=${TARGET_TRIPLE_MACHINE_CC}-linux-${TARGET_TRIPLE_OS}${ANDROID_PLA
 # The name for compiler is slightly different, so it is defined separately.
 export FAM_CC=${TOOLCHAIN_PATH}/bin/${TARGET}-clang
 export FAM_CXX=${FAM_CC}++
-export FAM_LD=${FAM_CC}
+export FAM_LD=${FAM_CC}++
 
 # TODO consider abondaning this strategy of defining the name of the clang wrapper
 # in favour of just passing -mstackrealign and -fno-addrsig depending on

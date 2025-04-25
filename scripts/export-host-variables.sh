@@ -3,6 +3,8 @@
 # Defining a toolchain directory's name according to the current OS.
 # Assume that proper version of NDK is installed
 # and is referenced by ANDROID_NDK_HOME environment variable
+
+echo "\$OSTYPE=$OSTYPE"
 case "$OSTYPE" in
   darwin*)  HOST_TAG="darwin-x86_64" ;;
   linux*)   HOST_TAG="linux-x86_64" ;;

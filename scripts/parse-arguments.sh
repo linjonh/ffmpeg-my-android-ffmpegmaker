@@ -35,8 +35,9 @@ SUPPORTED_LIBRARIES_GPL=(
   "libx264"
   "libx265"
 )
-
+echo "\$@=$@"
 for argument in "$@"; do
+  echo for loop parse argument=$argument
   case $argument in
   # Build for only specified ABIs (separated by comma)
   --target-abis=* | -abis=*)
@@ -45,6 +46,7 @@ for argument in "$@"; do
       case $abi in
       x86 | x86_64 | armeabi-v7a | arm64-v8a)
         ABIS_TO_BUILD+=("$abi")
+        echo parsed ABIS_TO_BUILD=${ABIS_TO_BUILD[@]}
         ;;
       arm)
         ABIS_TO_BUILD+=("armeabi-v7a")
@@ -128,12 +130,21 @@ for argument in "$@"; do
   --enable-libxml2 | -xml2)
     EXTERNAL_LIBRARIES+=("libxml2")
     ;;
+  --enable-libglew | -glew)
+    EXTERNAL_LIBRARIES+=("libglew")
+    ;;
+  --enable-libglfw | -glfw)
+    EXTERNAL_LIBRARIES+=("libglfw")
+    ;;
   --enable-all-free | -all-free)
     EXTERNAL_LIBRARIES+=" ${SUPPORTED_LIBRARIES_FREE[@]}"
     ;;
   --enable-all-gpl | -all-gpl)
     EXTERNAL_LIBRARIES+=" ${SUPPORTED_LIBRARIES_GPL[@]}"
     FFMPEG_GPL_ENABLED=true
+    ;;
+  --enable-ffmpeg | -ffmpeg)
+    EXTERNAL_LIBRARIES+=("ffmpeg")
     ;;
   *)
     echo "Unknown argument $argument"

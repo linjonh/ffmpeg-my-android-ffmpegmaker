@@ -43,4 +43,4 @@ RUN installAndroidComponent() { yes | ${ANDROID_SDK_HOME}/cmdline-tools/bin/sdkm
 
 # The command to be executed when a container is running
 # Passing additional arguments to the script is done via FAM_ARGS environment variable
-CMD cd /mnt/ffmpeg-android-maker && ./ffmpeg-android-maker.sh ${FAM_ARGS}
+CMD /bin/bash

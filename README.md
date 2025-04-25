@@ -1,3 +1,10 @@
+# 推荐使用Docker镜像编译
+使用如下:
+[tools/docker/Dockerfile](tools/docker/Dockerfile)
+在ffmaker镜像下运行
+
+# 原版仓库地址： https://github.com/Javernaut/ffmpeg-android-maker.gi
+
 # ffmpeg-android-maker
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6b9a9fe4c6874e65a5e2a3f9beb15605)](https://app.codacy.com/manual/Javernaut/ffmpeg-android-maker)
