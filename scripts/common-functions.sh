@@ -50,8 +50,8 @@ function setSourceLink() {
      if [[ "$usr" == "root" ]]; then
         ln -sf $origin_PATH $MOD_SOURCE_DIR 
      else
-        sudo ln -sf $origin_PATH $MOD_SOURCE_DIR && 2>/dev/null && 0<lin #设置软链接到源代码
-        sudo chmod +w $MOD_SOURCE_DIR && 2>/dev/null && 0<lin
+        sudo ln -sf $origin_PATH $MOD_SOURCE_DIR #&& 2>/dev/null && 0<lin #设置软链接到源代码
+        sudo chmod +w $MOD_SOURCE_DIR #&& 2>/dev/null && 0<lin
      fi
   fi
   cd $MOD_SOURCE_DIR && pwd
