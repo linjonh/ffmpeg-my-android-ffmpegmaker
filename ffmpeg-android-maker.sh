@@ -20,7 +20,7 @@ export STATS_DIR=${BASE_DIR}/stats
 export SCRIPTS_DIR=${BASE_DIR}/scripts
 # The directory to use by Android project
 # All FFmpeg's libraries and headers are copied there
-export OUTPUT_DIR=${BASE_DIR}/output
+export OUTPUT_DIR=${BASE_DIR}/saved_output
 
 # Check the host machine for proper setup and fail fast otherwise
 # ${SCRIPTS_DIR}/check-host-machine.sh || exit 1
@@ -38,11 +38,18 @@ export BUILD_DIR_EXTERNAL=$BUILD_DIR/external
 function prepareOutput() {
     OUTPUT_LIB=${OUTPUT_DIR}/lib/${ANDROID_ABI}
     mkdir -p ${OUTPUT_LIB}
-    cp ${BUILD_DIR_FFMPEG}/${ANDROID_ABI}/lib/*.so ${OUTPUT_LIB}
+    mkdir -p ${OUTPUT_DIR}/bin
+    echo -----------------------
+    echo "save output,run copy output *.so if exists"
+    cp ${BUILD_DIR_FFMPEG}/${ANDROID_ABI}/lib/*.so ${OUTPUT_LIB} && 2>dev/null
     
     OUTPUT_HEADERS=${OUTPUT_DIR}/include/${ANDROID_ABI}
     mkdir -p ${OUTPUT_HEADERS}
-    cp -r ${BUILD_DIR_FFMPEG}/${ANDROID_ABI}/include/* ${OUTPUT_HEADERS}
+    echo "save output,run copy output include if exists"
+    cp -r ${BUILD_DIR_FFMPEG}/${ANDROID_ABI}/include/* ${OUTPUT_HEADERS} && 2>dev/null
+
+    cp -r ${BUILD_DIR_FFMPEG}/${ANDROID_ABI}/bin/ ${OUTPUT_DIR}/bin && 2>dev/null
+    echo -----------------------
 }
 
 # Saving stats about text relocation presence.
@@ -71,7 +78,9 @@ function clearDir(){
 }
 
 # Exporting more necessary variabls
+echo "import ${SCRIPTS_DIR}/export-host-variables.sh 脚本"
 source ${SCRIPTS_DIR}/export-host-variables.sh
+echo "import ${SCRIPTS_DIR}/parse-arguments.sh 脚本"
 source ${SCRIPTS_DIR}/parse-arguments.sh
 
 export ffmpeg_source_path_of_link="${SOURCES_DIR}/ffmpeg/ffmpeg-7.1"
@@ -87,7 +96,7 @@ function getSource(){
     # Get the source code of component to build
     for COMPONENT in ${COMPONENTS_TO_BUILD[@]};
     do
-        echo "____step 1: Getting source code of the component: ${COMPONENT}"
+        echo "===> step 1: Getting source code of the component: ${COMPONENT}"
         SOURCE_DIR_FOR_COMPONENT=${SOURCES_DIR}/${COMPONENT}
         
         if [[ "$COMPONENT" == "libglew" || "$COMPONENT" == "libglfw" ]];then
@@ -107,7 +116,7 @@ function getSource(){
             if [[ -e $ffmpeg_source_path_of_link ]]; then
                 echo ffmpeg source exist
             else
-                echo ffmpeg source not exist.
+                echo ffmpeg source not exist, creat link parent dir of ffmpeg.
                 cd ${BASE_DIR}
                 cd ../
                 cur=$(pwd)
@@ -119,7 +128,7 @@ function getSource(){
                     sudo rm -rf $ffmpeg_source_path_of_link && 0<lin
                     sudo ln -sf ${cur}/ffmpeg-source $ffmpeg_source_path_of_link && 0<lin
                 fi
-                cd $ffmpeg_source_path_of_link && pwd
+                cd $ffmpeg_source_path_of_link && echo "ffmpeg source dir: $(pwd)"
             fi
         else
             source ${SCRIPTS_DIR}/${COMPONENT}/download.sh
@@ -150,10 +159,10 @@ function buildTarget(){
         source ${SCRIPTS_DIR}/export-build-variables.sh ${ABI}
         for COMPONENT in ${COMPONENTS_TO_BUILD[@]}
         do
-            echo "____buildTarget所有ABI: ${FFMPEG_ABIS_TO_BUILD[@]}"
-            echo "____buid所有component: ${COMPONENTS_TO_BUILD[@]}"
-            echo "____step 2: Building the component: ${COMPONENT}"
-            echo "____aready build are:${areadyBuild[@]}"
+            echo "===> buildTarget所有ABI: ${FFMPEG_ABIS_TO_BUILD[@]}"
+            echo "===> 构建所需的组件: ${COMPONENTS_TO_BUILD[@]}"
+            echo "===> 已构建了的组件: ${areadyBuild[@]}"
+            echo "===> step 2: current building component: ${COMPONENT}"
             
             if [[ "$COMPONENT" == "ffmpeg" && $1 == lib ]]; then
                 echo skip ffmpeg , just build libs
@@ -181,14 +190,14 @@ function buildTarget(){
 
 function justBuldFfmpeg(){
     # Exporting variables for the current ABI
-    echo "____buildTarget所有ABI: ${FFMPEG_ABIS_TO_BUILD[@]}"
+    echo "===> buildTarget所有ABI: ${FFMPEG_ABIS_TO_BUILD[@]}"
     for ABI in ${FFMPEG_ABIS_TO_BUILD[@]}
     do
         source ${SCRIPTS_DIR}/export-build-variables.sh ${ABI}
         
-        echo "____buildTarget所有ABI: ${FFMPEG_ABIS_TO_BUILD[@]}"
-        echo "____buid所有component: ${COMPONENTS_TO_BUILD[@]}"
-        echo "____step 2: Building the component: ffmpeg"
+        echo "===> buildTarget所有ABI: ${FFMPEG_ABIS_TO_BUILD[@]}"
+        echo "===> buid所有component: ${COMPONENTS_TO_BUILD[@]}"
+        echo "===> step 2: Building the component: ffmpeg"
         COMPONENT_SOURCES_DIR_VARIABLE=SOURCES_DIR_ffmpeg
         
         # Going to the actual source code directory of the current component

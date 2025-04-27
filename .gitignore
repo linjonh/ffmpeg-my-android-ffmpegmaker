@@ -1,5 +1,6 @@
 build
 output
+saved_output
 sources
 stats
 .DS_Store

@@ -20,7 +20,7 @@ for LIBARY_NAME in ${FFMPEG_EXTERNAL_LIBRARIES[@]}
 do
     echo  "LIBARY_NAME=$LIBARY_NAME"
     if [[ "$LIBARY_NAME" == "libglew" || "$LIBARY_NAME" == "libglfw" ]];then
-        echo "escape $COMPONENT"
+        echo "skip $LIBARY_NAME" # libglew 和 libglfw 不属于ffmpeg --enable-${xxx}的参数
     else
         echo " --enable-$LIBARY_NAME"
         ADDITIONAL_COMPONENTS+=" --enable-$LIBARY_NAME"
@@ -61,7 +61,10 @@ ARCH=$TARGET_TRIPLE_MACHINE_ARCH
   --disable-programs \
   --enable-filter=gltransition \
   --enable-jni \
-  --extra-libs="-L${BUILD_DIR_EXTERNAL}/${ANDROID_ABI}/lib64 -L${BUILD_DIR_EXTERNAL}/${ANDROID_ABI}/lib -L${SYSROOT_PATH}/usr/lib/$ARCH-linux-android/$DESIRED_ANDROID_API_LEVEL/ -lGLEW -lEGL -lGLESv2 " \
+  --extra-libs="-L${BUILD_DIR_EXTERNAL}/${ANDROID_ABI}/lib64 \
+  -L${BUILD_DIR_EXTERNAL}/${ANDROID_ABI}/lib \
+  -L${SYSROOT_PATH}/usr/lib/$ARCH-linux-android/$DESIRED_ANDROID_API_LEVEL/ \
+  -lGLEW -lEGL -lGLESv2 " \
   --pkg-config=${PKG_CONFIG_EXECUTABLE} \
   ${EXTRA_BUILD_CONFIGURATION_FLAGS} \
   $ADDITIONAL_COMPONENTS || exit 1

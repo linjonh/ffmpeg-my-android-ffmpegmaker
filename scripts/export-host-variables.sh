@@ -31,6 +31,7 @@ export HOST_NPROC=$HOST_NPROC
 export CMAKE_EXECUTABLE=$(which cmake)
 # Using Make from the Android SDK
 export MAKE_EXECUTABLE=${ANDROID_NDK_HOME}/prebuilt/${HOST_TAG}/bin/make
+echo $MAKE_EXECUTABLE
 # Using Build machine's Ninja. It is used for libdav1d building. Needs to be installed
 export NINJA_EXECUTABLE=$(which ninja)
 # Meson is used for libdav1d building. Needs to be installed
